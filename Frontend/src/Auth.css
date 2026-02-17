@@ -1,0 +1,121 @@
+/* Shared auth styles — matches project dark theme */
+:root{
+  --bg: #212121;
+  --card: #2a2a2a;
+  --muted: #b4b4b4;
+  --text: #ececec;
+  --accent: #339cff;
+}
+
+.auth-container{
+  min-height: 100vh;
+  display: flex;
+  width: 100%;
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--text);
+  padding: 2rem;
+}
+
+.auth-card{
+  width: 100%;
+    display: flex;
+    flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+  max-width: 430px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: 12px;
+  padding: 3rem;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.auth-title{
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.auth-sub{
+  margin: 0 0 1.25rem 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.form-group{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+input[type="text"], input[type="email"], input[type="password"]{
+  width: 100%;
+  padding: 12px 8px;
+  border-radius: 10px;
+  border: none;
+  align-items: center;
+  background-color: rgba(255,255,255,0.03);
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+input:focus{outline: none; box-shadow: 0 0 0 3px rgba(51,156,255,0.08);}
+
+.auth-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn{
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+}
+
+.btn-primary{
+  background-color: var(--accent);
+  color: white;
+  width: 100%;
+  box-shadow: 0 6px 18px rgba(51,156,255,0.12);
+}
+
+.btn-ghost{
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--text);
+}
+
+.helper{
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.switch-link{
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.notice{
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* small responsive tweaks */
+@media (max-width:480px){
+  .auth-card{padding:1.25rem}
+  .auth-title{font-size:1.25rem}
+}
