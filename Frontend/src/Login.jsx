@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import "./Auth.css";
+import API_URL from "./api.js";
 
 function Login(){
   const [email, setEmail] = useState("");
@@ -16,11 +17,15 @@ function Login(){
     }
     setLoading(true);
     try{
-      const res = await fetch("http://localhost:8080/api/auth/login", {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
+      const res = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({email, password})
+        body: JSON.stringify({email, password}),
+        signal: controller.signal
       });
+      clearTimeout(timeout);
       const data = await res.json();
       if(!res.ok){
         setMessage(data?.error || "Login failed");
@@ -33,7 +38,7 @@ function Login(){
         setTimeout(()=> window.location.href = '/', 900);
       }
     }catch(err){
-      setMessage("Network error — check backend");
+      setMessage(err.name === "AbortError" ? "Request timed out — check backend and Supabase" : "Network error — check backend");
       console.error(err);
     }
     setLoading(false);
@@ -42,7 +47,7 @@ function Login(){
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2 className="auth-title">SigmaGPT — Login</h2>
+        <h2 className="auth-title">BuddyAI — Login</h2>
         <p className="auth-sub">Welcome back — sign in to continue chatting.</p>
 
         <form onSubmit={handleSubmit}>

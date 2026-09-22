@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import "./Auth.css";
+import API_URL from "./api.js";
 
 function Signup(){
   const [name, setName] = useState("");
@@ -23,11 +24,15 @@ function Signup(){
 
     setLoading(true);
     try{
-      const res = await fetch("http://localhost:8080/api/auth/signup", {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
+      const res = await fetch(`${API_URL}/api/auth/signup`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({name, email, password})
+        body: JSON.stringify({name, email, password}),
+        signal: controller.signal
       });
+      clearTimeout(timeout);
       const data = await res.json();
       if(!res.ok){
         setMessage(data?.error || 'Signup failed');
@@ -37,7 +42,7 @@ function Signup(){
       }
     }catch(err){
       console.error(err);
-      setMessage('Network error — check backend');
+      setMessage(err.name === "AbortError" ? 'Request timed out — check backend and Supabase' : 'Network error — check backend');
     }
     setLoading(false);
   }
@@ -46,7 +51,7 @@ function Signup(){
     <div className="auth-container">
       <div className="auth-card">
         <h2 className="auth-title">Create account</h2>
-        <p className="auth-sub">Start using SigmaGPT — create a free account.</p>
+        <p className="auth-sub">Start using BuddyAI — create a free account.</p>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">

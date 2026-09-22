@@ -76,7 +76,7 @@
 //     <div className="chatWindow">
 //       <div className="navbar">
 //         <span>
-//           SigmaGPT <i className="fa-solid fa-chevron-down"></i>{" "}
+//           BuddyAI <i className="fa-solid fa-chevron-down"></i>{" "}
 //         </span>
 
 //         <div className="authButtons">
@@ -140,6 +140,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { MyContext } from "./MyContext.jsx";
 import { v1 as uuidv1 } from "uuid";
+import API_URL from "./api.js";
 import { ScaleLoader } from "react-spinners";
 
 function ChatWindow() {
@@ -174,10 +175,13 @@ function ChatWindow() {
     if (!prompt.trim()) return;
     setLoading(true);
     setNewChat(false);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 40000);
 
     const options = {
       method: "POST",
       headers: { "content-type": "application/json" },
+      signal: controller.signal,
       body: JSON.stringify({
         message: prompt,
         threadId: currThreadId || uuidv1(),
@@ -185,12 +189,15 @@ function ChatWindow() {
     };
 
     try {
-      const response = await fetch("http://localhost:8080/api/chat", options);
+      const response = await fetch(`${API_URL}/api/chat`, options);
       const res = await response.json();
+      if (!response.ok) throw new Error(res.error || "Chat request failed");
       setReply(res.reply);
     } catch (err) {
       console.error("Error fetching reply:", err);
+      setReply(`Error: ${err.name === "AbortError" ? "The request timed out" : err.message}`);
     } finally {
+      clearTimeout(timeout);
       setLoading(false);
     }
   };
@@ -215,7 +222,7 @@ function ChatWindow() {
     <div className="chatWindow">
       <div className="navbar">
         <span>
-          SigmaGPT <i className="fa-solid fa-chevron-down"></i>
+          BuddyAI <i className="fa-solid fa-chevron-down"></i>
         </span>
 
         <div className="authButtons">
