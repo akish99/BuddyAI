@@ -281,7 +281,7 @@ function ChatWindow() {
           </div>
         </div>
         <p className="info">
-          ChatGPT can make mistakes. Check important info. See Cookie
+          BuddyAI can make mistakes. Check important info. See Cookie
           Preferences.
         </p>
       </div>
